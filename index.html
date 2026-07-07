@@ -281,7 +281,7 @@
         .area-card h3 { margin-bottom: .4rem; font-size: .95rem; }
         .area-card p { font-size: .85rem; }
 
-        /* Paper card */
+        /* Paper cards */
         .papers-header {
             display: flex; align-items: center; justify-content: space-between;
             margin-bottom: 1.1rem; flex-wrap: wrap; gap: .5rem;
@@ -291,16 +291,15 @@
         .paper-card { border-radius: var(--r-lg); overflow: hidden; }
         .paper-card:hover { transform: none; }
         .paper-status {
-            background: var(--amber-bg); border-bottom: 1px solid rgba(217,119,6,.2);
             padding: .55rem 1.6rem; display: flex; align-items: center; gap: .55rem;
         }
         .status-pulse {
             width: 7px; height: 7px; border-radius: 50%;
-            background: var(--amber); animation: blink 2s ease-in-out infinite;
+            animation: blink 2s ease-in-out infinite;
         }
         .status-label {
             font-size: .7rem; font-weight: 700; letter-spacing: .1em;
-            text-transform: uppercase; color: var(--amber);
+            text-transform: uppercase;
         }
         .paper-body { padding: 1.75rem 1.6rem; }
         .paper-type {
@@ -329,9 +328,25 @@
         .venue-alt { font-size: .77rem; color: var(--text-muted); margin-top: .1rem; }
         .writing-badge {
             display: inline-flex; align-items: center; gap: .4rem;
-            background: var(--amber-bg); color: var(--amber);
             font-size: .72rem; font-weight: 700; padding: .3rem .8rem;
             border-radius: 999px; white-space: nowrap;
+        }
+
+        /* Status variants */
+        .status-writing { background: var(--amber-bg); border-bottom: 1px solid rgba(217,119,6,.2); }
+        .status-writing .status-pulse { background: var(--amber); }
+        .status-writing .status-label { color: var(--amber); }
+        .status-writing .writing-badge { background: var(--amber-bg); color: var(--amber); }
+
+        .status-planned { background: var(--sky-bg); border-bottom: 1px solid rgba(14,165,233,.2); }
+        .status-planned .status-pulse { background: var(--sky); }
+        .status-planned .status-label { color: var(--sky); }
+        .status-planned .writing-badge { background: var(--sky-bg); color: var(--sky); }
+
+        /* Papers grid */
+        .papers-grid { display: flex; flex-direction: column; gap: 1.5rem; }
+        .view-all-papers {
+            display: flex; justify-content: center; margin-top: 1.5rem;
         }
 
         /* ═══════════════════════════════════════
@@ -485,6 +500,7 @@
         @media (max-width: 680px) {
             .nav-links, .hamburger ~ .nav-links { display: none; }
             .hamburger { display: flex; }
+            #mobile-nav a { padding: .7rem 2rem; }
             section { padding: 4rem 0; }
             .projects-grid { grid-template-columns: 1fr; }
             .hero-stats { gap: 1.25rem; }
@@ -535,7 +551,7 @@
                     Practitioner → Researcher
                 </div>
                 <h1 class="hero-title">
-                    AI, Networks &amp;<br><em>Intelligent Automation</em>
+                    AI, Networks &<br><em>Intelligent Automation</em>
                 </h1>
                 <p class="hero-desc">
                     11 years engineering enterprise networks at scale. Now channeling that practitioner depth into research — applying LLMs to automate fault diagnosis, configuration management, and self-healing infrastructure.
@@ -556,8 +572,8 @@
                     </div>
                     <div class="hero-divider"></div>
                     <div>
-                        <div class="stat-val">3</div>
-                        <div class="stat-label">Research Areas</div>
+                        <div class="stat-val">2</div>
+                        <div class="stat-label">Research Papers</div>
                     </div>
                 </div>
             </div>
@@ -603,43 +619,86 @@
             </div>
         </div>
 
+        <!-- Papers -->
         <div class="reveal">
             <div class="papers-header">
                 <h3>Papers</h3>
-                <span class="papers-count">1 paper in progress</span>
+                <span class="papers-count">2 papers · 1 in progress, 1 planned</span>
             </div>
-            <div class="card paper-card">
-                <div class="paper-status">
-                    <div class="status-pulse"></div>
-                    <span class="status-label">Work in Progress · 2025</span>
-                </div>
-                <div class="paper-body">
-                    <div class="paper-type">Research Paper · Benchmarking &amp; Evaluation</div>
-                    <div class="paper-title">NetLLM-Eval: Benchmarking Large Language Models for Automated Fault Diagnosis and Root Cause Analysis in Enterprise Networks</div>
-                    <div class="paper-authors">Gowtham Saminathan</div>
-                    <div class="abstract-label">Abstract</div>
-                    <p class="paper-abstract">
-                        Enterprise network operations generate vast quantities of unstructured data — incident logs, syslog streams, configuration diffs, and ticketing records — that exceed the capacity of human operators to process at speed and scale. This paper introduces <em>NetLLM-Eval</em>, a benchmark framework grounded in real-world enterprise network incidents, covering three core tasks: (1) fault symptom classification from raw syslog and SNMP data, (2) root cause identification from multi-source incident context, and (3) remediation step generation for common network failure scenarios. Drawing from practitioner experience across 500+ managed devices spanning Palo Alto, Cisco, Juniper, and Fortinet platforms, we evaluate GPT-4o, Llama-3, and Mistral under zero-shot, few-shot, and chain-of-thought prompting regimes. Our results demonstrate that domain-adapted prompting yields up to 78% accuracy on fault classification — outperforming zero-shot baselines by 23 percentage points — and identify systematic failure modes in multi-vendor configuration reasoning, providing a reproducible evaluation harness for the research community.
-                    </p>
-                    <div class="paper-tags">
-                        <span class="tag primary">LLM Benchmarking</span>
-                        <span class="tag primary">Network Operations</span>
-                        <span class="tag primary">Fault Diagnosis</span>
-                        <span class="tag primary">Root Cause Analysis</span>
-                        <span class="tag">GPT-4o</span>
-                        <span class="tag">Llama-3</span>
-                        <span class="tag">Mistral</span>
-                        <span class="tag">Syslog / SNMP</span>
+
+            <div class="papers-grid">
+                <!-- Paper 1: NetLLM-Eval -->
+                <div class="card paper-card">
+                    <div class="paper-status status-writing">
+                        <div class="status-pulse"></div>
+                        <span class="status-label">Work in Progress · 2025</span>
                     </div>
-                    <div class="venue-row">
-                        <div>
-                            <div class="venue-label">Target Venue</div>
-                            <div class="venue-name">IEEE/IFIP Network Operations &amp; Management Symposium (NOMS) 2026</div>
-                            <div class="venue-alt">Alt: ACM SIGCOMM NetAI Workshop</div>
+                    <div class="paper-body">
+                        <div class="paper-type">Research Paper · Benchmarking & Evaluation</div>
+                        <div class="paper-title">NetLLM-Eval: Benchmarking Large Language Models for Automated Fault Diagnosis and Root Cause Analysis in Enterprise Networks</div>
+                        <div class="paper-authors">Gowtham Saminathan</div>
+                        <div class="abstract-label">Abstract</div>
+                        <p class="paper-abstract">
+                            Enterprise network operations generate vast quantities of unstructured data — incident logs, syslog streams, configuration diffs, and ticketing records — that exceed the capacity of human operators to process at speed and scale. This paper introduces <em>NetLLM-Eval</em>, a benchmark framework grounded in real-world enterprise network incidents, covering three core tasks: (1) fault symptom classification from raw syslog and SNMP data, (2) root cause identification from multi-source incident context, and (3) remediation step generation for common network failure scenarios. Drawing from practitioner experience across 500+ managed devices spanning Palo Alto, Cisco, Juniper, and Fortinet platforms, we evaluate GPT-4o, Llama-3, and Mistral under zero-shot, few-shot, and chain-of-thought prompting regimes. Our results demonstrate that domain-adapted prompting yields up to 78% accuracy on fault classification — outperforming zero-shot baselines by 23 percentage points — and identify systematic failure modes in multi-vendor configuration reasoning, providing a reproducible evaluation harness for the research community.
+                        </p>
+                        <div class="paper-tags">
+                            <span class="tag primary">LLM Benchmarking</span>
+                            <span class="tag primary">Network Operations</span>
+                            <span class="tag primary">Fault Diagnosis</span>
+                            <span class="tag primary">Root Cause Analysis</span>
+                            <span class="tag">GPT-4o</span>
+                            <span class="tag">Llama-3</span>
+                            <span class="tag">Mistral</span>
+                            <span class="tag">Syslog / SNMP</span>
                         </div>
-                        <span class="writing-badge"><i class="fas fa-pen-nib"></i> Writing</span>
+                        <div class="venue-row">
+                            <div>
+                                <div class="venue-label">Target Venue</div>
+                                <div class="venue-name">IEEE/IFIP NOMS 2026</div>
+                                <div class="venue-alt">Alt: ACM SIGCOMM NetAI Workshop</div>
+                            </div>
+                            <span class="writing-badge"><i class="fas fa-pen-nib"></i> Writing</span>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Paper 2: Analog LLM -->
+                <div class="card paper-card">
+                    <div class="paper-status status-planned">
+                        <div class="status-pulse"></div>
+                        <span class="status-label">Position Paper · Planned · 2025</span>
+                    </div>
+                    <div class="paper-body">
+                        <div class="paper-type">Position / Roadmap Paper · Analog & Optical Inference</div>
+                        <div class="paper-title">Executing Trained Transformers on Low-Cost Physical Substrates: A Frugal Roadmap for Analog Electronic and Optical Inference</div>
+                        <div class="paper-authors">Gowtham · Independent Researcher</div>
+                        <div class="abstract-label">Abstract</div>
+                        <p class="paper-abstract">
+                            The energy and memory cost of LLM inference is dominated not by arithmetic but by moving weights between memory and processor. Analog in-memory and optical computing eliminate this movement by encoding trained weights as physical quantities. This paper argues the field's binding constraint is the absence of an open toolchain for mapping quantized transformers onto small, noisy, reusable physical tiles. We contribute a reference hybrid analog–digital architecture, a staged sub-$500 implementation methodology, a pre-registered evaluation protocol, and a cost analysis identifying data converters — not analog cores — as the true bottleneck.
+                        </p>
+                        <div class="paper-tags">
+                            <span class="tag primary">Analog Computing</span>
+                            <span class="tag primary">In-Memory Computing</span>
+                            <span class="tag primary">Optical Neural Networks</span>
+                            <span class="tag primary">Transformers</span>
+                            <span class="tag">Quantization</span>
+                            <span class="tag">Frugal Science</span>
+                            <span class="tag">Open Hardware</span>
+                        </div>
+                        <div class="venue-row">
+                            <div>
+                                <div class="venue-label">Type</div>
+                                <div class="venue-name">Position / Roadmap Paper</div>
+                                <div class="venue-alt">No experimental results claimed — design targets & estimates</div>
+                            </div>
+                            <span class="writing-badge"><i class="fas fa-flask"></i> Planned</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="view-all-papers">
+                <a href="research.html" class="btn btn-ghost"><i class="fas fa-arrow-right"></i> View Full Paper Details</a>
             </div>
         </div>
     </div>
@@ -664,7 +723,7 @@
                     <div class="tl-item">
                         <div class="tl-dot"></div>
                         <div class="tl-period">2025 — Present</div>
-                        <div class="tl-role">Network Engineer &amp; Independent Researcher</div>
+                        <div class="tl-role">Network Engineer & Independent Researcher</div>
                         <div class="tl-org">AI × Networking — LLM-driven NetOps</div>
                     </div>
                     <div class="tl-item">
@@ -677,7 +736,7 @@
                         <div class="tl-dot"></div>
                         <div class="tl-period">2016 — 2020</div>
                         <div class="tl-role">Network Engineer</div>
-                        <div class="tl-org">Security &amp; Infrastructure — Palo Alto, Cisco, Juniper</div>
+                        <div class="tl-org">Security & Infrastructure — Palo Alto, Cisco, Juniper</div>
                     </div>
                     <div class="tl-item">
                         <div class="tl-dot"></div>
@@ -701,7 +760,7 @@
         </div>
         <div class="skills-grid reveal">
             <div class="card skill-group">
-                <div class="skill-group-label"><i class="fas fa-brain"></i> AI &amp; Automation</div>
+                <div class="skill-group-label"><i class="fas fa-brain"></i> AI & Automation</div>
                 <div class="pills">
                     <span class="pill">Python</span><span class="pill">LLM Agents</span>
                     <span class="pill">Groq API</span><span class="pill">Llama 3</span>
@@ -710,7 +769,7 @@
                 </div>
             </div>
             <div class="card skill-group">
-                <div class="skill-group-label"><i class="fas fa-network-wired"></i> Routing &amp; Switching</div>
+                <div class="skill-group-label"><i class="fas fa-network-wired"></i> Routing & Switching</div>
                 <div class="pills">
                     <span class="pill">BGP</span><span class="pill">OSPF</span><span class="pill">MPLS</span>
                     <span class="pill">HSRP / VRRP</span><span class="pill">VLANs / VxLAN</span>
@@ -801,7 +860,7 @@
             </div>
             <div class="card project-card">
                 <div class="project-num">04</div>
-                <div class="project-title">Device Hardening &amp; Health Reporting</div>
+                <div class="project-title">Device Hardening & Health Reporting</div>
                 <p class="project-desc">Automated device hardening achieving 95% security compliance, eliminating 8 hours of manual reporting per week.</p>
                 <div class="impact-badge"><i class="fas fa-shield-alt fa-xs"></i> 95% compliance score</div>
                 <div class="stack-pills">
