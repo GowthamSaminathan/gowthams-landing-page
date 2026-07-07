@@ -2,10 +2,561 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=index.html#research">
-    <title>Redirecting…</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research & Papers — Gowtham Saminathan</title>
+    <meta name="description" content="Research papers by Gowtham Saminathan at the intersection of LLMs, analog computing, and network operations.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ─── Design tokens (synced with index.html) ─── */
+        :root {
+            --bg:           #f8fafc;
+            --bg-card:      #ffffff;
+            --bg-subtle:    #f1f5f9;
+            --text:         #0f172a;
+            --text-muted:   #64748b;
+            --text-dim:     #94a3b8;
+            --border:       #e2e8f0;
+            --primary:      #4f46e5;
+            --primary-bg:   #eef2ff;
+            --violet:       #7c3aed;
+            --violet-bg:    #f5f3ff;
+            --sky:          #0ea5e9;
+            --sky-bg:       #f0f9ff;
+            --green:        #059669;
+            --green-bg:     #ecfdf5;
+            --amber:        #d97706;
+            --amber-bg:     #fffbeb;
+            --red:          #dc2626;
+            --red-bg:       #fef2f2;
+            --shadow-sm:    0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.05);
+            --shadow-md:    0 4px 16px rgba(0,0,0,.08);
+            --shadow-lg:    0 16px 48px rgba(0,0,0,.1);
+            --r:            12px;
+            --r-lg:         20px;
+            --nav-h:        64px;
+        }
+        [data-theme="dark"] {
+            --bg:           #0b0f1a;
+            --bg-card:      #111827;
+            --bg-subtle:    #172033;
+            --text:         #e2e8f0;
+            --text-muted:   #94a3b8;
+            --text-dim:     #475569;
+            --border:       #1e293b;
+            --primary-bg:   #1e1b4b;
+            --violet-bg:    #2e1065;
+            --sky-bg:       #0c2a3e;
+            --green-bg:     rgba(5,150,105,.12);
+            --amber-bg:     rgba(217,119,6,.1);
+            --red-bg:       rgba(220,38,38,.12);
+            --shadow-sm:    0 1px 3px rgba(0,0,0,.4);
+            --shadow-md:    0 4px 20px rgba(0,0,0,.4);
+            --shadow-lg:    0 16px 48px rgba(0,0,0,.5);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            transition: background .3s, color .3s;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { text-decoration: none; color: inherit; }
+        button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+        /* ─── Typography ─── */
+        .serif { font-family: 'Playfair Display', serif; }
+        h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 2.8rem); line-height: 1.15; color: var(--text); }
+        h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 2.5vw, 1.9rem); line-height: 1.2; color: var(--text); }
+        h3 { font-size: 1.05rem; font-weight: 700; color: var(--text); }
+        p { color: var(--text-muted); line-height: 1.75; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 0 2rem; }
+        section { padding: 4rem 0; }
+
+        /* ─── Eyebrow ─── */
+        .eyebrow {
+            display: inline-flex; align-items: center; gap: .5rem;
+            font-size: .72rem; font-weight: 700; letter-spacing: .14em;
+            text-transform: uppercase; color: var(--primary);
+            margin-bottom: .9rem;
+        }
+        .eyebrow::before {
+            content: ''; display: block; width: 20px; height: 2px;
+            background: var(--primary); border-radius: 2px;
+        }
+
+        /* ─── Buttons ─── */
+        .btn {
+            display: inline-flex; align-items: center; gap: .5rem;
+            padding: .55rem 1.15rem; border-radius: 8px;
+            font-size: .82rem; font-weight: 600;
+            transition: all .2s; white-space: nowrap;
+        }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-primary:hover { background: #4338ca; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(79,70,229,.35); }
+        .btn-ghost { color: var(--text); border: 1.5px solid var(--border); }
+        .btn-ghost:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
+
+        /* ─── Card base ─── */
+        .card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--r); transition: transform .25s, box-shadow .25s, border-color .25s;
+        }
+        .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: rgba(79,70,229,.3); }
+
+        /* ─── Tag / pill ─── */
+        .tag {
+            display: inline-block; font-size: .72rem; font-weight: 600;
+            padding: .2rem .65rem; border-radius: 999px;
+            background: var(--bg-subtle); border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+        .tag.primary { background: var(--primary-bg); border-color: transparent; color: var(--primary); }
+        .tag.green { background: var(--green-bg); border-color: transparent; color: var(--green); }
+
+        /* ═══════════════════════════════════════
+           NAV
+        ═══════════════════════════════════════ */
+        #navbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            height: var(--nav-h);
+            background: rgba(248,250,252,.88);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            transition: background .3s;
+        }
+        [data-theme="dark"] #navbar { background: rgba(11,15,26,.88); }
+        .nav-inner {
+            height: 100%; display: flex; align-items: center;
+            justify-content: space-between; gap: 1.5rem;
+        }
+        .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; color: var(--text); }
+        .nav-links { display: flex; align-items: center; gap: 1.75rem; list-style: none; }
+        .nav-links a {
+            font-size: .85rem; font-weight: 500;
+            color: var(--text-muted); transition: color .2s;
+            padding-bottom: 2px; border-bottom: 2px solid transparent;
+        }
+        .nav-links a:hover { color: var(--text); }
+        .nav-links a.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .nav-actions { display: flex; align-items: center; gap: .6rem; }
+        .icon-btn {
+            width: 34px; height: 34px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: .85rem; color: var(--text-muted);
+            background: var(--bg-subtle); border: 1px solid var(--border);
+            transition: all .2s;
+        }
+        .icon-btn:hover { color: var(--text); background: var(--border); }
+
+        /* Mobile nav */
+        #mobile-nav {
+            display: none; position: fixed;
+            top: var(--nav-h); left: 0; right: 0; z-index: 99;
+            background: var(--bg-card); border-bottom: 1px solid var(--border);
+            padding: .5rem 0 1rem;
+        }
+        #mobile-nav.open { display: block; }
+        #mobile-nav a {
+            display: block; padding: .7rem 2rem;
+            font-size: .9rem; font-weight: 500; color: var(--text-muted);
+        }
+        #mobile-nav a:hover { color: var(--primary); background: var(--bg-subtle); }
+        .hamburger { display: none; }
+
+        /* ═══════════════════════════════════════
+           HEADER
+        ═══════════════════════════════════════ */
+        .page-header {
+            padding-top: calc(var(--nav-h) + 3rem);
+            padding-bottom: 2.5rem;
+        }
+        .page-header h1 { margin-bottom: .6rem; }
+        .page-header p { max-width: 600px; }
+        .back-link {
+            display: inline-flex; align-items: center; gap: .4rem;
+            font-size: .82rem; font-weight: 500; color: var(--primary);
+            margin-bottom: 1.5rem; transition: gap .2s;
+        }
+        .back-link:hover { gap: .7rem; }
+
+        /* ═══════════════════════════════════════
+           PAPER CARDS
+        ═══════════════════════════════════════ */
+        .papers-list { display: flex; flex-direction: column; gap: 2.5rem; }
+
+        .paper-card { border-radius: var(--r-lg); overflow: hidden; }
+        .paper-card:hover { transform: none; }
+        .paper-status {
+            padding: .55rem 1.6rem; display: flex; align-items: center; gap: .55rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .status-pulse {
+            width: 7px; height: 7px; border-radius: 50%;
+            animation: blink 2s ease-in-out infinite;
+        }
+        @keyframes blink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.75)} }
+        .status-label {
+            font-size: .7rem; font-weight: 700; letter-spacing: .1em;
+            text-transform: uppercase;
+        }
+        .paper-body { padding: 1.75rem 1.6rem; }
+        .paper-type {
+            font-size: .68rem; font-weight: 700; letter-spacing: .1em;
+            text-transform: uppercase; color: var(--primary); margin-bottom: .4rem;
+        }
+        .paper-title {
+            font-family: 'Playfair Display', serif; font-size: 1.3rem;
+            font-weight: 700; color: var(--text); line-height: 1.35;
+            margin-bottom: .35rem;
+        }
+        .paper-meta { font-size: .83rem; color: var(--text-muted); margin-bottom: 1.1rem; }
+        .paper-meta .author { font-weight: 600; color: var(--text); }
+        .abstract-label {
+            font-size: .68rem; font-weight: 700; letter-spacing: .12em;
+            text-transform: uppercase; color: var(--text-dim); margin-bottom: .4rem;
+        }
+        .paper-abstract { font-size: .875rem; line-height: 1.78; margin-bottom: 1.4rem; }
+        .paper-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1.4rem; }
+
+        /* Section headings inside paper */
+        .paper-sections { margin-top: 1.25rem; }
+        .paper-sections h4 {
+            font-size: .78rem; font-weight: 700; letter-spacing: .08em;
+            text-transform: uppercase; color: var(--text-dim);
+            margin: 1.25rem 0 .5rem;
+        }
+        .paper-sections p { font-size: .85rem; line-height: 1.75; margin-bottom: .6rem; }
+        .paper-sections ul { margin-left: 1.2rem; margin-bottom: .6rem; }
+        .paper-sections li {
+            font-size: .85rem; color: var(--text-muted); line-height: 1.7;
+            margin-bottom: .25rem;
+        }
+        .paper-sections table {
+            width: 100%; border-collapse: collapse; font-size: .82rem;
+            margin: .75rem 0 1rem;
+        }
+        .paper-sections th, .paper-sections td {
+            padding: .5rem .6rem; text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .paper-sections th {
+            font-weight: 700; color: var(--text);
+            font-size: .7rem; letter-spacing: .08em; text-transform: uppercase;
+        }
+        .paper-sections td { color: var(--text-muted); }
+
+        /* Venue / action row */
+        .venue-row {
+            display: flex; align-items: center; justify-content: space-between;
+            background: var(--bg-subtle); border-radius: 10px;
+            padding: .9rem 1.1rem; gap: 1rem; flex-wrap: wrap;
+        }
+        .venue-label { font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: .15rem; }
+        .venue-name { font-size: .875rem; font-weight: 600; color: var(--text); }
+        .venue-alt { font-size: .77rem; color: var(--text-muted); margin-top: .1rem; }
+        .writing-badge {
+            display: inline-flex; align-items: center; gap: .4rem;
+            font-size: .72rem; font-weight: 700; padding: .3rem .8rem;
+            border-radius: 999px; white-space: nowrap;
+        }
+
+        /* Status variants */
+        .status-writing { background: var(--amber-bg); border-bottom-color: rgba(217,119,6,.2); }
+        .status-writing .status-pulse { background: var(--amber); }
+        .status-writing .status-label { color: var(--amber); }
+        .status-writing .writing-badge { background: var(--amber-bg); color: var(--amber); }
+
+        .status-planned { background: var(--sky-bg); border-bottom-color: rgba(14,165,233,.2); }
+        .status-planned .status-pulse { background: var(--sky); }
+        .status-planned .status-label { color: var(--sky); }
+        .status-planned .writing-badge { background: var(--sky-bg); color: var(--sky); }
+
+        /* ─── Phases table (analog paper) ─── */
+        .phases-table { margin: .5rem 0 1rem; }
+        .phases-table th, .phases-table td { padding: .45rem .5rem; }
+        .phases-table th { background: var(--bg-subtle); }
+
+        /* ─── References ─── */
+        .references { margin-top: 1rem; }
+        .references li {
+            font-size: .8rem; color: var(--text-muted); line-height: 1.65;
+            margin-bottom: .35rem; padding-left: .5rem;
+        }
+
+        /* ═══════════════════════════════════════
+           FOOTER
+        ═══════════════════════════════════════ */
+        footer {
+            border-top: 1px solid var(--border); padding: 1.75rem 0;
+        }
+        .footer-inner {
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 1rem;
+        }
+        .footer-copy { font-size: .8rem; color: var(--text-dim); }
+        .footer-socials { display: flex; gap: 1.1rem; }
+        .footer-socials a { font-size: .95rem; color: var(--text-dim); transition: color .2s; }
+        .footer-socials a:hover { color: var(--primary); }
+
+        /* ═══════════════════════════════════════
+           SCROLL REVEAL
+        ═══════════════════════════════════════ */
+        .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
+        .reveal.in { opacity: 1; transform: none; }
+        .reveal-delay-1 { transition-delay: .1s; }
+        .reveal-delay-2 { transition-delay: .2s; }
+
+        /* ═══════════════════════════════════════
+           RESPONSIVE
+        ═══════════════════════════════════════ */
+        @media (max-width: 680px) {
+            .nav-links { display: none; }
+            .hamburger { display: flex; }
+            .paper-body { padding: 1.4rem 1.2rem; }
+            .paper-title { font-size: 1.1rem; }
+            .venue-row { flex-direction: column; align-items: flex-start; }
+            section { padding: 3rem 0; }
+            .footer-inner { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
 </head>
-<body>
-    <p>Redirecting to <a href="index.html#research">research section</a>…</p>
+<body data-theme="light">
+
+<!-- ══ NAV ══════════════════════════════ -->
+<nav id="navbar">
+    <div class="container nav-inner">
+        <a href="index.html" class="nav-logo">Gowtham Saminathan</a>
+        <ul class="nav-links">
+            <li><a href="index.html">← Back to Home</a></li>
+            <li><a href="research.html" class="active">Research</a></li>
+        </ul>
+        <div class="nav-actions">
+            <button class="icon-btn" id="theme-btn" aria-label="Toggle dark mode">
+                <i class="fas fa-moon" id="theme-icon"></i>
+            </button>
+            <button class="icon-btn hamburger" id="hamburger" aria-label="Open menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+<div id="mobile-nav">
+    <a href="index.html">← Back to Home</a>
+    <a href="research.html">Research</a>
+</div>
+
+<!-- ══ PAGE HEADER ═══════════════════════ -->
+<section class="page-header">
+    <div class="container">
+        <div class="reveal">
+            <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to home</a>
+            <div class="eyebrow">Research</div>
+            <h1>Papers & Publications</h1>
+            <p>Research at the intersection of large language models, analog computing, and intelligent network operations. Each paper is grounded in production experience and targets peer-reviewed venues.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ══ PAPERS LIST ═══════════════════════ -->
+<section style="padding-top:0;">
+    <div class="container papers-list">
+
+        <!-- ── Paper 1: NetLLM-Eval ── -->
+        <div class="card paper-card reveal">
+            <div class="paper-status status-writing">
+                <div class="status-pulse"></div>
+                <span class="status-label">Work in Progress · 2025</span>
+            </div>
+            <div class="paper-body">
+                <div class="paper-type">Research Paper · Benchmarking & Evaluation</div>
+                <div class="paper-title">NetLLM-Eval: Benchmarking Large Language Models for Automated Fault Diagnosis and Root Cause Analysis in Enterprise Networks</div>
+                <div class="paper-meta"><span class="author">Gowtham Saminathan</span> · Independent Researcher · <a href="mailto:gowtham@gowthams.com" style="color:var(--primary);">gowtham@gowthams.com</a></div>
+
+                <div class="abstract-label">Abstract</div>
+                <p class="paper-abstract">
+                    Enterprise network operations generate vast quantities of unstructured data — incident logs, syslog streams, configuration diffs, and ticketing records — that exceed the capacity of human operators to process at speed and scale. This paper introduces <em>NetLLM-Eval</em>, a benchmark framework grounded in real-world enterprise network incidents, covering three core tasks: (1) fault symptom classification from raw syslog and SNMP data, (2) root cause identification from multi-source incident context, and (3) remediation step generation for common network failure scenarios. Drawing from practitioner experience across 500+ managed devices spanning Palo Alto, Cisco, Juniper, and Fortinet platforms, we evaluate GPT-4o, Llama-3, and Mistral under zero-shot, few-shot, and chain-of-thought prompting regimes. Our results demonstrate that domain-adapted prompting yields up to 78% accuracy on fault classification — outperforming zero-shot baselines by 23 percentage points — and identify systematic failure modes in multi-vendor configuration reasoning, providing a reproducible evaluation harness for the research community.
+                </p>
+                <div class="paper-tags">
+                    <span class="tag primary">LLM Benchmarking</span>
+                    <span class="tag primary">Network Operations</span>
+                    <span class="tag primary">Fault Diagnosis</span>
+                    <span class="tag primary">Root Cause Analysis</span>
+                    <span class="tag">GPT-4o</span>
+                    <span class="tag">Llama-3</span>
+                    <span class="tag">Mistral</span>
+                    <span class="tag">Syslog / SNMP</span>
+                </div>
+                <div class="venue-row">
+                    <div>
+                        <div class="venue-label">Target Venue</div>
+                        <div class="venue-name">IEEE/IFIP Network Operations & Management Symposium (NOMS) 2026</div>
+                        <div class="venue-alt">Alt: ACM SIGCOMM NetAI Workshop</div>
+                    </div>
+                    <span class="writing-badge"><i class="fas fa-pen-nib"></i> Writing</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Paper 2: Analog LLM ── -->
+        <div class="card paper-card reveal reveal-delay-1">
+            <div class="paper-status status-planned">
+                <div class="status-pulse"></div>
+                <span class="status-label">Position Paper · Planned · 2025</span>
+            </div>
+            <div class="paper-body">
+                <div class="paper-type">Position / Roadmap Paper · Analog & Optical Inference</div>
+                <div class="paper-title">Executing Trained Transformers on Low-Cost Physical Substrates: A Frugal Roadmap for Analog Electronic and Optical Inference</div>
+                <div class="paper-meta"><span class="author">Gowtham</span> · Independent Researcher · <a href="mailto:gowtham@gowthams.com" style="color:var(--primary);">gowtham@gowthams.com</a></div>
+
+                <div class="abstract-label">Abstract</div>
+                <p class="paper-abstract">
+                    The energy and memory cost of large language model (LLM) inference is dominated not by arithmetic but by moving weights between memory and processor. Analog in-memory and optical computing eliminate this movement by encoding trained weights as physical quantities — electrical conductances or optical transmittances — so that a matrix–vector multiplication (MVM) is performed by physics itself in effectively constant time. Progress, however, is concentrated in a small number of well-funded laboratories. This paper argues that the field's binding constraint is not access to exotic devices but the absence of an open, end-to-end toolchain for mapping quantized transformers onto small, noisy, reusable physical tiles. We contribute (i) a reference hybrid analog–digital architecture built around weight-stationary tiles with time-multiplexed "tile-and-reuse" weight virtualization; (ii) a staged implementation methodology with a total bill of materials under US$500, spanning open-source noise-aware simulation, an 8×8 digital-potentiometer crossbar, and an incoherent optical multiplier built from printed transparency masks; (iii) a pre-registered evaluation protocol; and (iv) a cost and scaling analysis identifying data converters and reprogramming overhead — not the analog cores — as the true bottlenecks. We conclude that the most scalable contribution available to independent researchers is the compiler and calibration stack, validated on deliberately inexpensive hardware.
+                </p>
+                <div class="paper-tags">
+                    <span class="tag primary">Analog Computing</span>
+                    <span class="tag primary">In-Memory Computing</span>
+                    <span class="tag primary">Optical Neural Networks</span>
+                    <span class="tag primary">Transformers</span>
+                    <span class="tag">Quantization</span>
+                    <span class="tag">Frugal Science</span>
+                    <span class="tag">Open Hardware</span>
+                </div>
+
+                <div class="paper-sections">
+                    <h4>Contributions</h4>
+                    <ul>
+                        <li><strong>Reference architecture</strong> for hybrid analog–digital transformer inference organized around weight-stationary tiles, differential nonnegative weight encoding, hardware-in-the-loop calibration, and tile-and-reuse weight virtualization.</li>
+                        <li><strong>Staged methodology</strong> with four phases — noise-aware simulation, an electronic crossbar tile, an incoherent optical tile, and a hybrid transformer block — each with explicit deliverables and cost under $500 total.</li>
+                        <li><strong>Pre-registered evaluation protocol</strong> defining metrics (task fidelity, effective precision, energy, throughput, stability), baselines, and a sim-to-real gap measurement.</li>
+                        <li><strong>Cost and scaling analysis</strong> quantifying why data converters and reprogramming latency, not the analog medium, dominate total cost.</li>
+                    </ul>
+
+                    <h4>Implementation Roadmap</h4>
+                    <table class="phases-table">
+                        <thead>
+                            <tr>
+                                <th>Phase</th>
+                                <th>Duration</th>
+                                <th>Est. Cost</th>
+                                <th>Deliverable</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>0. Noise-aware simulation</td>
+                                <td>6–8 weeks</td>
+                                <td>$0</td>
+                                <td>Accuracy-vs-noise curves for target models</td>
+                            </tr>
+                            <tr>
+                                <td>1. Electronic crossbar tile</td>
+                                <td>6–8 weeks</td>
+                                <td>≤ $120</td>
+                                <td>Measured 8×8 analog MVM; ENOB report</td>
+                            </tr>
+                            <tr>
+                                <td>2. Incoherent optical tile</td>
+                                <td>8–12 weeks</td>
+                                <td>≤ $100</td>
+                                <td>Optical MVM with calibration; ENOB report</td>
+                            </tr>
+                            <tr>
+                                <td>3. Hybrid transformer block</td>
+                                <td>12–16 weeks</td>
+                                <td>≤ $80</td>
+                                <td>End-to-end token generation through physical tiles</td>
+                            </tr>
+                            <tr>
+                                <td>4. Community silicon + toolchain</td>
+                                <td>Ongoing</td>
+                                <td>≈ $300 (optional)</td>
+                                <td>Open-source compiler/calibration stack</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>Evaluation Metrics (Pre-Registered)</h4>
+                    <ul>
+                        <li><strong>M1 — Task fidelity:</strong> Classification accuracy (MNIST) and perplexity delta vs. FP32 baseline, with 95% confidence intervals over ≥ 10 runs.</li>
+                        <li><strong>M2 — Effective precision:</strong> ENOB of the physical MVM, derived from measured SNDR per output channel.</li>
+                        <li><strong>M3 — Energy:</strong> Energy per MAC measured at the wall, decomposed into analog core, DACs/ADCs, and orchestrator.</li>
+                        <li><strong>M4 — Throughput:</strong> MVMs per second and end-to-end seconds per generated token, including reprogramming time.</li>
+                        <li><strong>M5 — Stability:</strong> Drift of M1 and M2 over 24 hours and ±10 °C ambient sweep, with and without recalibration.</li>
+                    </ul>
+
+                    <h4>Key Insight</h4>
+                    <p>Two costs dominate, and neither is the analog medium. First, <em>conversion</em>: every physical MVM is bracketed by DACs and ADCs, and in small systems the converters consume the large majority of total energy. Second, <em>reprogramming under virtualization</em>: a 7-billion-parameter model contains ≈ 10⁸ tiles of size 8×8. Frugal tile-and-reuse therefore cannot target competitive throughput; it targets <em>architectural fidelity</em> — proof that the compiler, calibration, and noise-adaptation stack is correct — on hardware anyone can afford.</p>
+
+                    <h4>Keywords</h4>
+                    <p style="font-size:.82rem;">analog computing, in-memory computing, optical neural networks, transformers, quantization, frugal science, open hardware</p>
+                </div>
+
+                <div class="venue-row" style="margin-top:1.5rem;">
+                    <div>
+                        <div class="venue-label">Type</div>
+                        <div class="venue-name">Position / Roadmap Paper — No experimental results claimed</div>
+                        <div class="venue-alt">All numerical values are design targets or estimates, not measurements</div>
+                    </div>
+                    <span class="writing-badge"><i class="fas fa-flask"></i> Planned</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ══ FOOTER ════════════════════════════ -->
+<footer>
+    <div class="container footer-inner">
+        <span class="footer-copy">© 2025 Gowtham Saminathan. All rights reserved.</span>
+        <div class="footer-socials">
+            <a href="mailto:gowtham@gowthams.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+            <a href="https://linkedin.com/in/gowthamsaminathan" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            <a href="https://github.com/GowthamSaminathan" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // ── Theme ──────────────────────────────────────
+    const body = document.body;
+    const themeBtn  = document.getElementById('theme-btn');
+    const themeIcon = document.getElementById('theme-icon');
+    const stored = localStorage.getItem('theme')
+        || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    body.dataset.theme = stored;
+    themeIcon.className = stored === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+
+    themeBtn.addEventListener('click', () => {
+        const next = body.dataset.theme === 'dark' ? 'light' : 'dark';
+        body.dataset.theme = next;
+        themeIcon.className = next === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        localStorage.setItem('theme', next);
+    });
+
+    // ── Mobile nav ────────────────────────────────
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobile-nav');
+    hamburger.addEventListener('click', () => mobileNav.classList.toggle('open'));
+    document.querySelectorAll('#mobile-nav a').forEach(l =>
+        l.addEventListener('click', () => mobileNav.classList.remove('open'))
+    );
+
+    // ── Scroll reveal ────────────────────────────
+    const ioReveal = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting) { e.target.classList.add('in'); ioReveal.unobserve(e.target); }
+        });
+    }, { threshold: 0.05 });
+    document.querySelectorAll('.reveal').forEach(el => ioReveal.observe(el));
+</script>
+
 </body>
 </html>
